@@ -12,6 +12,7 @@ export const canJoinRoom = async (roomId: number = NaN): Promise<boolean> => {
         roomId: roomId
     }
     const request = createRequest(targetUrl, "POST", body)
+    // rezultじゃなくてresultですね
     const rezult = await fetch(request).then(
         value => value.text()
     )
