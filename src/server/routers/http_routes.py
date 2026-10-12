@@ -1,9 +1,14 @@
+from os import eventfd_write
+
 from fastapi import APIRouter, Request, Body
 from fastapi.responses import HTMLResponse
 from pathlib import Path
 from room_manager import RoomManager, Room
 from schemas.network import CanJoinRoomMessage, CreateRoomMessage
 from typing import Union
+import logging
+
+logger = logging.getLogger("uvicorn.error")
 
 DISTDIR = Path(__file__).resolve().parent / ".." / ".." / ".." / "dist"
 
@@ -20,7 +25,7 @@ def _(request: Request):
 
 @router.get("/room/{room_id:path}")
 async def _(request: Request):
-    print("get room", request)
+    logger.info(f"get room {request}")
     nonce = request.state.nonce
     html_content = (DISTDIR / "index.html").read_text(encoding="utf-8")
     html_content = html_content.replace("__NONCE__", nonce)
@@ -37,7 +42,7 @@ async def _(
         # body is CreateRoomBody
         new_room = RoomManager.create_room()
         if isinstance(new_room, Room):
-            print("CREATE ROOM id:", new_room.id)
+            logger.info(f"CREATE ROOM id: {new_room.id}")
             return new_room.id
         return None
     else:

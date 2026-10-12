@@ -1,7 +1,9 @@
 from fastapi import WebSocket
 from session import Session
 import secrets
+import logging
 
+logger = logging.getLogger("uvicorn")
 
 class SessionManager:
     session_list: list[Session] = []
@@ -19,7 +21,7 @@ class SessionManager:
         while exists():
             new_id = secrets.randbelow(10000)
         cls.session_list.append(Session(new_id, ws, target_room_id))
-        print(f"RM create_room() room_id:{target_room_id} session_id:{new_id}")
+        logger.info(f"RM create_room() room_id:{target_room_id} session_id:{new_id}")
         return cls.search_session_by_id(new_id)
 
     @classmethod

@@ -2,7 +2,9 @@ import asyncio
 from collections.abc import Callable
 from typing import Any
 import inspect
+import logging
 
+logger = logging.getLogger("uvicorn.error")
 
 class Debounce:
     def __init__(
@@ -13,7 +15,7 @@ class Debounce:
         **kwargs: dict[str, Any],
     ):
         self._debounce_time_scound: int = debounce_time_ms
-        print(
+        logger.info(
             f"create Debounce time:{self._debounce_time_scound}  {inspect.iscoroutinefunction(callback)}"
         )
         self._calllback: Callable[[], Any] = callback
@@ -29,13 +31,13 @@ class Debounce:
         self._task = asyncio.create_task(self._run_calllback())
 
     def resetTimer(self):
-        print("resetTimer")
+        logger.info("resetTimer")
         self.setTimer()
 
     async def _run_calllback(self):
         try:
             await asyncio.sleep(self._debounce_time_scound)
-            print("Debounce run calllback")
+            logger.info("Debounce run calllback")
             if self._is_coroutine_function:
                 await self._calllback(*self._calllback_args, **self._callback_kwargs)
             else:

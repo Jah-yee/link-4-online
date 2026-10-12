@@ -1,0 +1,21 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: ./src/server/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      APP_HOST: "0.0.0.0"
+    volumes:
+      - ./src/server/:/app/src/server
+  frontend:
+    build:
+      context: .
+      dockerfile: ./src/front/Dockerfile
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/src/server
+      - /app/node_modules

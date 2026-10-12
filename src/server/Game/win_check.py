@@ -12,7 +12,9 @@ from schemas.game import (
     DirectionDown,
     DirectionRight,
 )
+import logging
 
+logger = logging.getLogger("uvicorn.error")
 
 def get_col_direction_list(board: Board, x: int):
     col_direction_list: list[BoardSell] = []
@@ -34,14 +36,14 @@ def _has_linked_4(target_list: list[BoardSell], player_num: PlayerNumber):
 
 def _wincheck_horizoontal(board: Board, player_num: PlayerNumber) -> WinPattern | None:
     board_height = 6
-    # print("wincheck_horizontal",player_num)
+    # logger.info("wincheck_horizontal",player_num)
     for i in range(board_height):
         rezult = _has_linked_4(board.root[i], player_num)
         if rezult:
             search_start_position = (i, 0)
-            # print("rezult",rezult,"len",len(rezult.group(0)),rezult.span()[0])
+            # logger.info("rezult",rezult,"len",len(rezult.group(0)),rezult.span()[0])
             distance_startposition_and_search_start_position = rezult.span()[0]
-            # print("距離", distance_startposition_and_search_start_position)
+            # logger.info("距離", distance_startposition_and_search_start_position)
             start_position = (
                 search_start_position[0]
                 + (
@@ -63,14 +65,14 @@ def _wincheck_horizoontal(board: Board, player_num: PlayerNumber) -> WinPattern 
 
 
 def _wincheck_vertical(board: Board, player_num: PlayerNumber) -> WinPattern | None:
-    # print("wincheck_vertical", player_num)
+    # logger.info("wincheck_vertical", player_num)
     board_width = 7
     for i in range(board_width):
         rezult = _has_linked_4(get_col_direction_list(board, i), player_num)
         if rezult:
             search_start_position = (0, i)
             distance_start_position_and_search_start_position = 6 - rezult.span()[1]
-            # print("距離", distance_start_position_and_search_start_position,rezult)
+            # logger.info("距離", distance_start_position_and_search_start_position,rezult)
             start_position = (
                 search_start_position[0]
                 + (
@@ -103,13 +105,13 @@ def _get_ascending_diagonal(start_position: tuple[int, int], board: Board):
 
 
 def _get_descending_diagonal(start_position: tuple[int, int], board: Board):
-    # pprint.pprint(board)
+    # pprint.plogger.info(board)
     descending_diagonal_list: list[BoardSell] = []
     y = start_position[0]
     x = start_position[1]
-    # print(f"({y},{x})")
+    # logger.info(f"({y},{x})")
     while y <= 5 and x <= 6:
-        # print(f"({y},{x})")
+        # logger.info(f"({y},{x})")
         descending_diagonal_list.append(board.root[y][x])
         y += 1
         x += 1
@@ -119,7 +121,7 @@ def _get_descending_diagonal(start_position: tuple[int, int], board: Board):
 def _wincheck_ascending_diagonal(
     board: Board, player_num: PlayerNumber
 ) -> WinPattern | None:
-    # print("wincheck_ascending_diagonal")
+    # logger.info("wincheck_ascending_diagonal")
     search_start_position_list: list[tuple[int, int]] = [
         (0, 3),
         (0, 4),
@@ -133,12 +135,12 @@ def _wincheck_ascending_diagonal(
         target_list: list[BoardSell] = _get_ascending_diagonal(
             search_start_position, board
         )
-        # print(target_list,len(target_list))
-        # print("ascending", search_start_position, target_list)
+        # logger.info(target_list,len(target_list))
+        # logger.info("ascending", search_start_position, target_list)
         rezult = _has_linked_4(target_list, player_num)
         if rezult:
             distance_startposition_and_search_start_position = rezult.span()[0]
-            # print("距離", distance_startposition_and_search_start_position)
+            # logger.info("距離", distance_startposition_and_search_start_position)
             start_position = (
                 search_start_position[0]
                 + (
@@ -162,7 +164,7 @@ def _wincheck_ascending_diagonal(
 def _wincheck_descending_diagonal(
     board: Board, player_num: PlayerNumber
 ) -> WinPattern | None:
-    # print("wincheck_descending_diagonal")
+    # logger.info("wincheck_descending_diagonal")
     search_start_position_list: list[tuple[int, int]] = [
         (0, 3),
         (0, 2),
@@ -175,12 +177,12 @@ def _wincheck_descending_diagonal(
         target_list: list[BoardSell] = _get_descending_diagonal(
             search_start_position, board
         )
-        # print(target_list,len(target_list))
-        # print("desending", search_start_position, target_list)
+        # logger.info(target_list,len(target_list))
+        # logger.info("desending", search_start_position, target_list)
         rezult = _has_linked_4(target_list, player_num)
         if rezult:
             distance_startposition_and_search_start_position = rezult.span()[0]
-            # print("距離", distance_startposition_and_search_start_position)
+            # logger.info("距離", distance_startposition_and_search_start_position)
             start_position = (
                 search_start_position[0]
                 + (
@@ -202,7 +204,7 @@ def _wincheck_descending_diagonal(
 
 
 def wincheck(board: Board) -> WinningLine:
-    print("wincheck")
+    logger.info("wincheck")
     linked_4_list: WinningLine = WinningLine([])
     for i in range(1, 2 + 1):
         if i in (1, 2):
@@ -219,6 +221,6 @@ def wincheck(board: Board) -> WinningLine:
             addWinPattern(_wincheck_ascending_diagonal(board, player_num))
             addWinPattern(_wincheck_descending_diagonal(board, player_num))
 
-    print("linked_4_list:filter:befor", linked_4_list)
-    print("linked_4_list:filter:after", linked_4_list)
+    logger.info(f"linked_4_list:filter:befor {linked_4_list}")
+    logger.info(f"linked_4_list:filter:after {linked_4_list}")
     return linked_4_list

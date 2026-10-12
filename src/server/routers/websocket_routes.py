@@ -11,6 +11,9 @@ from session_manager import SessionManager
 from session import Session
 from schemas.network import UserMessage
 from pydantic import TypeAdapter, ValidationError
+import logging
+
+logger = logging.getLogger("uvicorn.error")
 
 ALLOWED_ORIGINS = [
     "http://localhost:5173",
@@ -26,42 +29,42 @@ router = APIRouter(prefix="", tags=["websocket"])
 async def _(room_id: str, ws: WebSocket):
     origin = ws.headers.get("origin")
     if origin not in ALLOWED_ORIGINS:
-        print(f"{origin} is not in ALLOWED_ORIGINS")
+        logger.info(f"{origin} is not in ALLOWED_ORIGINS")
         await ws.close(code=status.WS_1008_POLICY_VIOLATION)
         return
     await ws.accept()
     if not room_id.isdigit():
-        print("room_id is not number")
+        logger.info("room_id is not number")
         raise WebSocketException(code=1008, reason="room_id is not number")
     if not isinstance(RoomManager.search_room_by_id(int(room_id)), Room):
-        print("undefined room")
+        logger.info("undefined room")
         raise WebSocketException(code=1008, reason="undefined room")
     if not RoomManager.can_join_room(int(room_id)):
-        print("can not join room")
+        logger.info("can not join room")
         raise WebSocketException(code=1008, reason="can not join room")
-    print("ws.accept")
+    logger.info("ws.accept")
 
-    print("room_id is number", room_id)
+    logger.info(f"room_id is number {room_id}")
     session = SessionManager.create_session(ws, int(room_id))
     if not isinstance(session, Session):
-        print("did not create Session")
+        logger.info("did not create Session")
         return await ws.close(code=1008, reason="did not create Session")
     try:
         while True:
             message = await session.ws.receive_json()
-            # print("message:",message)
+            # logger.info("message:",message)
             try:
                 if TypeAdapter(UserMessage).validate_python(message):
                     await session.handlle_message(UserMessage(message))
             except ValidationError as e:
-                print("EXception:", e)
-                print("message:", message)
+                logger.info(f"EXception: {e}")
+                logger.info(f"message: {message}")
     except WebSocketDisconnect:
         await session.exit_room()
     except RuntimeError as error:
         if not SessionManager.search_session_by_id(session.id):
-            return print("session was closed")
-        print("catch runtime error:", error)
-        print(error.__class__.__name__)
+            return logger.info("session was closed")
+        logger.info(f"catch runtime error: {error}")
+        logger.info(error.__class__.__name__)
     except Exception as e:
-        print("server session error:", e)
+        logger.info(f"server session error: {e}")

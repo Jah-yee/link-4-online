@@ -9,19 +9,32 @@ WebSocket と Vue.js の学習で作りました。
 [ English README is here ](./README_en.md)
 ## 技術スタック
 ### フロントエンド
-- 言語: TypeScript
-- パッケージマネージャ: pnpm
+- TypeScript
+- pnpm
 - Vite
-- Vue
+- Vue.js
 - VueRouter
 ### バックエンド
-- 言語: Python
+- Python
 - FastAPI
 - Pydantic
 - uvicorn
 - websockets
 
-## セットアップ
+## 実行方法
+### Docker
+#### Dev
+`docker-compose.dev.yml` を使って開発コンテナを起動する
+```bash
+docker compose -f docker-compose.dev.yml up
+```
+#### Build
+`docker-compose.yml` を使ってビルドしたコンテナを起動する
+```bash
+docker compose up
+```
+### pnpm + pip
+#### セットアップ
 1. pnpm の依存パッケージをインストールします
     ```bash
     pnpm i # or pnpm install
@@ -32,8 +45,7 @@ WebSocket と Vue.js の学習で作りました。
     ```bash
     pip install -r requirements.txt
     ```
-## 実行方法
-### Dev
+#### Dev
 1. python サーバーを起動する
 
     venvを利用する場合は実行する前にvenvをアクティベートしてください
@@ -46,7 +58,7 @@ WebSocket と Vue.js の学習で作りました。
     ```
 
     `http://localhost:5173`でサイトにアクセスすることができます
-### Build
+#### Build
 1. フロントエンドのファイルをビルドします
     ```bash
     pnpm build

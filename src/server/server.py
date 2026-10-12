@@ -10,6 +10,10 @@ import uvicorn
 from pathlib import Path
 import secrets
 from typing import Callable, Awaitable
+import os
+import logging
+
+logger = logging.getLogger("uvicorn.error")
 
 
 from routers import http_routes, websocket_routes
@@ -54,4 +58,5 @@ app.include_router(websocket_routes.router)
 
 
 if __name__ == "__main__":
-    uvicorn.run("server:app", port=8000, reload=True)
+    host =  os.getenv("APP_HOST","127.0.0.1")
+    uvicorn.run("server:app", host=host , port=8000, reload=True)

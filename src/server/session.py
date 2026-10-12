@@ -8,6 +8,9 @@ from schemas.network import (
     UserInfoMessage,
 )
 from debounce import Debounce
+import logging
+
+logger = logging.getLogger("uvicorn.error")
 
 
 class Session:
@@ -32,12 +35,12 @@ class Session:
         try:
             await self.ws.close()
         except RuntimeError:
-            print("session ws did closed")
+            logger.info("session ws did closed")
 
     async def handlle_message(self, user_message: UserMessage):
         from session_manager import SessionManager
 
-        print("message:", user_message, "room_id:", self.target_room_id)
+        logger.info(f"message: {user_message} room_id: {self.target_room_id}")
         match user_message.root.action:
             case "JOIN":
                 await self.join_room()
@@ -55,9 +58,9 @@ class Session:
                         user_message.root
                     )
                     await self.game_action(GameActionPut_message)
-                    print("END GAMEACTION")
+                    logger.info("END GAMEACTION")
                 except ValidationError as e:
-                    print("not GameActionPut", "errpr ", e)
+                    logger.info(f"not GameActionPut errpr {e}")
             case "USERINFO":
                 try:
                     UserInfo_message = UserInfoMessage.model_validate(user_message.root)
@@ -65,7 +68,7 @@ class Session:
                 except:
                     pass
             case "GAMEFINISH":
-                print("sesssion gmae finish")
+                logger.info("sesssion gmae finish")
                 await self.finishGame()
             case _:
                 pass
@@ -79,7 +82,7 @@ class Session:
 
             target_room = self.get_target_room()
             if target_room:
-                print("room session_list len ", len(target_room.session_list))
+                logger.info(f"room session_list len {len(target_room.session_list)}")
 
             await joind_room.broadcast(WebsocketMessage("ROOMINFO"))
             await joind_room.broadcast(WebsocketMessage("GAMEINFO"))
@@ -105,7 +108,7 @@ class Session:
                 await target_room.broadcast(WebsocketMessage("GAMEINFO"))
                 await target_room.broadcast(WebsocketMessage("ROOMINFO"))
             except RuntimeError as e:
-                print("runtime error:", e)
+                logger.info(f"runtime error: {e}")
 
     async def exit_room(self):
         target_room = self.get_target_room()
@@ -124,7 +127,7 @@ class Session:
             return None
 
     async def game_action(self, message: GameActionPutMessage):
-        print("game_action", self.get_player_number())
+        logger.info(f"game_action {self.get_player_number()}")
 
         target_room = self.get_target_room()
 

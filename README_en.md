@@ -9,19 +9,32 @@ I created this repository to learn WebSocket and Vue.js.
 [ 日本語のREADMEはこちら ](./README.md)
 ## Tech stack
 ### Frontend
-- language: TypeScript
-- package manager: pnpm
+- TypeScript
+- pnpm
 - Vite
-- Vue
+- Vue.js
 - VueRouter
 ### Backend
-- language: Python
+- Python
 - FastAPI
 - Pydantic
 - uvicorn
 - websockets
 
-## Setup
+## How to run
+### Docker
+#### Dev
+Start the development container using `docker-compose.dev.yml`
+```bash
+docker compose -f docker-compose.dev.yml up
+```
+#### Build
+Start the built container using `docker-compose.yml`
+```bash
+docker compose up
+```
+### pnpm + pip
+#### Setup
 1. Install frontend dependencies
     ```bash
     pnpm i # or pnpm install
@@ -32,8 +45,7 @@ I created this repository to learn WebSocket and Vue.js.
     ```bash
     pip install -r requirements.txt
     ```
-## How to run
-### Dev
+#### Dev
 1. Run the Python server
 
     If you use venv, make sure to activate it before running the command.
@@ -46,7 +58,7 @@ I created this repository to learn WebSocket and Vue.js.
     ```
 
     You can access the site at `http://localhost:5173`.
-### Build
+#### Build
 1. Build the frontend
     ```bash
     pnpm build

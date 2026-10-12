@@ -1,5 +1,8 @@
 from Game.win_check import wincheck
 from schemas.game import GameData, GameState, PlayerNumber, Board, BoardSell
+import logging
+
+logger = logging.getLogger("ubvicorn.error")
 
 
 class Link_4:
@@ -22,7 +25,7 @@ class Link_4:
 
     @board.setter
     def board(self, new_board: Board):
-        print("game.boardが変更されました")
+        logger.info("game.boardが変更されました")
         self._board = new_board
 
     def game_start(self):
@@ -31,7 +34,7 @@ class Link_4:
         self._board = Board([[BoardSell(0) for _ in range(7)] for _ in range(6)])
 
     def put(self, x: int, player: PlayerNumber):
-        print(f"put {x} player: {player}")
+        logger.info(f"put {x} player: {player}")
         if (
             self._get_put_height(x) == self.board_height
             or self.gameState.root != "playing"
@@ -41,7 +44,7 @@ class Link_4:
             return
         # 置く高さ
         put_y_index = self.board_height - self._get_put_height(x) - 1
-        print("put_y", put_y_index)
+        logger.info(f"put_y: {put_y_index}")
         if put_y_index < 0:
             return
         self._board.root[put_y_index][x].root = self.now_turn.root
@@ -63,7 +66,7 @@ class Link_4:
             self.now_turn.root = 2
         else:
             self.now_turn.root = 1
-        print(f"not turn:{self.now_turn}")
+        logger.info(f"not turn:{self.now_turn}")
 
     def get_col_direction_list(self, x: int):
         col_direction_list: list[int] = []
@@ -89,7 +92,7 @@ class Link_4:
         return [[sell.root for sell in row] for row in self.board.root]
 
     def get_game_data(self, player: PlayerNumber) -> GameData:
-        print("get_game_data:", self.gameState.root)
+        logger.info(f"get_game_data: {self.gameState.root}")
         return GameData(
             board=self._board,
             playerNum=player,

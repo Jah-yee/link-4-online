@@ -3,7 +3,9 @@ from room import Room
 
 from typing import Literal
 import secrets
+import logging
 
+logger = logging.getLogger("uvicorn.error")
 
 class RoomManager:
     room_list: list[Room] = []
@@ -23,7 +25,7 @@ class RoomManager:
             new_room_id = secrets.randbelow(10000)
 
         cls.room_list.append(Room(new_room_id))
-        print(f"RM create_room() room_id:{new_room_id}")
+        logger.info(f"RM create_room() room_id:{new_room_id}")
         RoomManager.printRoomStatus()
         return RoomManager.search_room_by_id(new_room_id)
 
@@ -66,14 +68,14 @@ class RoomManager:
 
     @classmethod
     def printRoomStatus(cls):
-        print("---RoomStatus---")
-        print(f"room count:{len(RoomManager.room_list)}")
-        print(
+        logger.info("---RoomStatus---")
+        logger.info(f"room count:{len(RoomManager.room_list)}")
+        logger.info(
             f"session count:{len(list((session for session in room.session_list) for room in RoomManager.room_list))}"
         )
-        print(" room id | session id")
+        logger.info(" room id | session id")
         for room in RoomManager.room_list:
-            print(f" {room.id} | {[session.id for session in room.session_list]}")
+            logger.info(f" {room.id} | {[session.id for session in room.session_list]}")
         if len(RoomManager.room_list) == 0:
-            print("    NO ROOM      ")
-        print("-" * 17)
+            logger.info("    NO ROOM      ")
+        logger.info("-" * 17)

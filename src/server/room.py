@@ -10,6 +10,9 @@ from schemas.network import (
     WebsocketMessageUnion,
 )
 from debounce import Debounce
+import logging
+
+logger = logging.getLogger("uvicorn.error")
 
 
 class Room:
@@ -60,11 +63,7 @@ class Room:
     async def exit(self, session: Session):
         from room_manager import RoomManager
 
-        print(
-            "Room exit check exists:",
-            self.exists_session(session),
-            session in self.session_list,
-        )
+        logger.info(f"Room exit check exists: {self.exists_session(session)} {session in self.session_list}")
         if self.exists_session(session):
             if self.player_1 is session:
                 self.player_1 = None
@@ -92,7 +91,7 @@ class Room:
                 else:
                     if self.player_1:
                         remotePlayerReadyBool = self.player_1.ready_start_game
-                print("get_ws_message ROOMINFO")
+                logger.info("get_ws_message ROOMINFO")
                 return WebsocketMessageRoomInfo(
                     message="ROOMINFO",
                     numberOfSession=len(self.session_list),
@@ -103,8 +102,8 @@ class Room:
                 )
             case "GAMEINFO":
                 player_number = session.get_player_number()
-                print("BROADCAST GAMEINFO player_number:", player_number)
-                print("winningLine", player_number)
+                logger.info(f"BROADCAST GAMEINFO player_number: {player_number}")
+                logger.info(f"winningLine {player_number}")
                 if isinstance(player_number, PlayerNumber):
                     return WebsocketMessageGameInfo(
                         message="GAMEINFO",
@@ -137,12 +136,12 @@ class Room:
             return False
 
     async def broadcast(self, message: WebsocketMessage):
-        print("BROADCAST message:", message)
+        logger.info(f"BROADCAST message: {message}")
         for session in self.session_list:
             send_message = self.get_ws_message(message, session)
             if send_message != None:
                 await session.ws.send_json(send_message.model_dump())
-        print("BROADCAST END message:", message)
+        logger.info(f"BROADCAST END message: {message}")
 
     @property
     def game(self):
