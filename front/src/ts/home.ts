@@ -2,15 +2,7 @@ import { router } from './router';
 import type { WebsocketBody } from './type';
 import { createRequest } from './util';
 
-
-const targetURL = (() => {
-    if (import.meta.env.DEV) {
-        return "http://localhost:8000/room"
-    } else {
-        return "/room"
-    }
-})()
-
+const targetUrl = `${import.meta.env.VITE_API_BASE_URL}/room`
 
 export const canJoinRoom = async (roomId: number = NaN): Promise<boolean> => {
     if (Number.isNaN(roomId)) return false
@@ -19,7 +11,7 @@ export const canJoinRoom = async (roomId: number = NaN): Promise<boolean> => {
         action: 'CANJOIN',
         roomId: roomId
     }
-    const request = createRequest(targetURL, "POST", body)
+    const request = createRequest(targetUrl, "POST", body)
     const rezult = await fetch(request).then(
         value => value.text()
     )
@@ -30,7 +22,7 @@ export const createRoom = async () => {
     const body: WebsocketBody.CreateRoomBody = {
         action: "CREATE"
     }
-    const request = createRequest(targetURL, "POST", body)
+    const request = createRequest(targetUrl, "POST", body)
     const rezult = Number(await fetch(request).then(
         value => value.text()
     ))

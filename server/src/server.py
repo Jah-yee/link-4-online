@@ -18,7 +18,7 @@ logger = logging.getLogger("uvicorn.error")
 
 from routers import http_routes, websocket_routes
 
-DISTDIR = Path(__file__).resolve().parent / ".." / ".." / "dist"
+# DISTDIR = Path(__file__).resolve().parent / ".." / ".." / "dist"
 
 app = FastAPI()
 
@@ -47,9 +47,9 @@ async def add_csp_nonce(
     return response
 
 
-app.mount(
-    "/assets", StaticFiles(directory=DISTDIR / "assets", html=True), name="assets"
-)
+# app.mount(
+#     "/assets", StaticFiles(directory=DISTDIR / "assets", html=True), name="assets"
+# )
 
 
 app.include_router(http_routes.router)
@@ -58,5 +58,7 @@ app.include_router(websocket_routes.router)
 
 
 if __name__ == "__main__":
-    host =  os.getenv("APP_HOST","127.0.0.1")
-    uvicorn.run("server:app", host=host , port=8000, reload=True)
+    host =  os.getenv("APP_HOST", "127.0.0.1")
+    app_env = os.getenv("APP_ENV", "development")
+    is_dev_environment = app_env == "development"
+    uvicorn.run("server:app", host=host , port=8000, reload=is_dev_environment)

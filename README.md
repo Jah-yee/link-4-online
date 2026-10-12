@@ -26,12 +26,12 @@ WebSocket と Vue.js の学習で作りました。
 #### Dev
 `docker-compose.dev.yml` を使って開発コンテナを起動する
 ```bash
-docker compose -f docker-compose.dev.yml up
+docker compose up
 ```
 #### Build
 `docker-compose.yml` を使ってビルドしたコンテナを起動する
 ```bash
-docker compose up
+docker compose -f compose.prod.yaml up
 ```
 ### pnpm + pip
 #### セットアップ
