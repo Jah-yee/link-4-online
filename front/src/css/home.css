@@ -26,11 +26,11 @@
     }
 
     65% {
-        color: var(--game-board-sell-circle-red);
+        color: var(--game-board-cell-circle-red);
     }
 
     90% {
-        color: var(--game-board-sell-circle-yellow);
+        color: var(--game-board-cell-circle-yellow);
     }
 
     100% {

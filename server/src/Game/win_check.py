@@ -1,7 +1,7 @@
 import re
 from schemas.game import (
     Board,
-    BoardSell,
+    BoardCell,
     WinPattern,
     WinningLine,
     PlayerNumber,
@@ -17,19 +17,19 @@ import logging
 logger = logging.getLogger("uvicorn.error")
 
 def get_col_direction_list(board: Board, x: int):
-    col_direction_list: list[BoardSell] = []
+    col_direction_list: list[BoardCell] = []
     board_height = 6
     for i in range(board_height - 1, -1, -1):
         col_direction_list.append(board.root[i][x])
     return col_direction_list
 
 
-def _has_linked_4(target_list: list[BoardSell], player_num: PlayerNumber):
+def _has_linked_4(target_list: list[BoardCell], player_num: PlayerNumber):
     pattern = rf"{player_num.root}{{4,}}"
-    target_text = "".join(map(str, [sell.root for sell in target_list]))
-    rezult = re.search(pattern, target_text)
-    if rezult:
-        return rezult
+    target_text = "".join(map(str, [cell.root for cell in target_list]))
+    result = re.search(pattern, target_text)
+    if result:
+        return result
     else:
         return None
 
@@ -38,11 +38,11 @@ def _wincheck_horizoontal(board: Board, player_num: PlayerNumber) -> WinPattern 
     board_height = 6
     # logger.info("wincheck_horizontal",player_num)
     for i in range(board_height):
-        rezult = _has_linked_4(board.root[i], player_num)
-        if rezult:
+        result = _has_linked_4(board.root[i], player_num)
+        if result:
             search_start_position = (i, 0)
-            # logger.info("rezult",rezult,"len",len(rezult.group(0)),rezult.span()[0])
-            distance_startposition_and_search_start_position = rezult.span()[0]
+            # logger.info("result",result,"len",len(result.group(0)),result.span()[0])
+            distance_startposition_and_search_start_position = result.span()[0]
             # logger.info("距離", distance_startposition_and_search_start_position)
             start_position = (
                 search_start_position[0]
@@ -59,7 +59,7 @@ def _wincheck_horizoontal(board: Board, player_num: PlayerNumber) -> WinPattern 
             return WinPattern(
                 startPosition=Position(start_position),
                 direction=Direction(DirectionRight(root=(0, 1))),
-                len=len(rezult.group(0)),
+                len=len(result.group(0)),
             )
     return None
 
@@ -68,11 +68,11 @@ def _wincheck_vertical(board: Board, player_num: PlayerNumber) -> WinPattern | N
     # logger.info("wincheck_vertical", player_num)
     board_width = 7
     for i in range(board_width):
-        rezult = _has_linked_4(get_col_direction_list(board, i), player_num)
-        if rezult:
+        result = _has_linked_4(get_col_direction_list(board, i), player_num)
+        if result:
             search_start_position = (0, i)
-            distance_start_position_and_search_start_position = 6 - rezult.span()[1]
-            # logger.info("距離", distance_start_position_and_search_start_position,rezult)
+            distance_start_position_and_search_start_position = 6 - result.span()[1]
+            # logger.info("距離", distance_start_position_and_search_start_position,result)
             start_position = (
                 search_start_position[0]
                 + (
@@ -88,13 +88,13 @@ def _wincheck_vertical(board: Board, player_num: PlayerNumber) -> WinPattern | N
             return WinPattern(
                 startPosition=Position(start_position),
                 direction=Direction(DirectionDown((1, 0))),
-                len=len(rezult.group(0)),
+                len=len(result.group(0)),
             )
     return None
 
 
 def _get_ascending_diagonal(start_position: tuple[int, int], board: Board):
-    ascending_diagonal_list: list[BoardSell] = []
+    ascending_diagonal_list: list[BoardCell] = []
     y = start_position[0]
     x = start_position[1]
     while y <= 5 and x >= 0:
@@ -106,7 +106,7 @@ def _get_ascending_diagonal(start_position: tuple[int, int], board: Board):
 
 def _get_descending_diagonal(start_position: tuple[int, int], board: Board):
     # pprint.plogger.info(board)
-    descending_diagonal_list: list[BoardSell] = []
+    descending_diagonal_list: list[BoardCell] = []
     y = start_position[0]
     x = start_position[1]
     # logger.info(f"({y},{x})")
@@ -132,14 +132,14 @@ def _wincheck_ascending_diagonal(
     ]
 
     for search_start_position in search_start_position_list:
-        target_list: list[BoardSell] = _get_ascending_diagonal(
+        target_list: list[BoardCell] = _get_ascending_diagonal(
             search_start_position, board
         )
         # logger.info(target_list,len(target_list))
         # logger.info("ascending", search_start_position, target_list)
-        rezult = _has_linked_4(target_list, player_num)
-        if rezult:
-            distance_startposition_and_search_start_position = rezult.span()[0]
+        result = _has_linked_4(target_list, player_num)
+        if result:
+            distance_startposition_and_search_start_position = result.span()[0]
             # logger.info("距離", distance_startposition_and_search_start_position)
             start_position = (
                 search_start_position[0]
@@ -156,7 +156,7 @@ def _wincheck_ascending_diagonal(
             return WinPattern(
                 startPosition=Position(start_position),
                 direction=Direction(DirectionDownLeft((1, -1))),
-                len=len(rezult.group(0)),
+                len=len(result.group(0)),
             )
     return None
 
@@ -174,14 +174,14 @@ def _wincheck_descending_diagonal(
         (2, 0),
     ]
     for search_start_position in search_start_position_list:
-        target_list: list[BoardSell] = _get_descending_diagonal(
+        target_list: list[BoardCell] = _get_descending_diagonal(
             search_start_position, board
         )
         # logger.info(target_list,len(target_list))
         # logger.info("desending", search_start_position, target_list)
-        rezult = _has_linked_4(target_list, player_num)
-        if rezult:
-            distance_startposition_and_search_start_position = rezult.span()[0]
+        result = _has_linked_4(target_list, player_num)
+        if result:
+            distance_startposition_and_search_start_position = result.span()[0]
             # logger.info("距離", distance_startposition_and_search_start_position)
             start_position = (
                 search_start_position[0]
@@ -198,7 +198,7 @@ def _wincheck_descending_diagonal(
             return WinPattern(
                 startPosition=Position(start_position),
                 direction=Direction(DirectionDownRight((1, 1))),
-                len=len(rezult.group(0)),
+                len=len(result.group(0)),
             )
     return None
 

@@ -66,12 +66,12 @@
 }
 
 .game_selector button[data-player="1"]::after {
-    background-color: var(--game-board-sell-circle-red);
+    background-color: var(--game-board-cell-circle-red);
     opacity: 0.8;
 }
 
 .game_selector button[data-player="2"]::after {
-    background-color: var(--game-board-sell-circle-yellow);
+    background-color: var(--game-board-cell-circle-yellow);
     opacity: 0.8;
 }
 
@@ -90,31 +90,31 @@
     border-top: unset;
 }
 
-.game_board_sell {
-    border: solid 1px var(--game-board-sell-circle-border-color);
-    border-radius: var(--game-board-sell-radius);
+.game_board_cell {
+    border: solid 1px var(--game-board-cell-circle-border-color);
+    border-radius: var(--game-board-cell-radius);
     position: relative;
 }
 
-.game_board_sell[data-player="1"]::before {
+.game_board_cell[data-player="1"]::before {
     content: "";
     display: block;
     height: 100%;
     width: 100%;
-    background-color: var(--game-board-sell-circle-red);
+    background-color: var(--game-board-cell-circle-red);
     border-radius: 50%;
 }
 
-.game_board_sell[data-player="2"]::before {
+.game_board_cell[data-player="2"]::before {
     content: "";
     display: block;
     height: 100%;
     width: 100%;
-    background-color: var(--game-board-sell-circle-yellow);
+    background-color: var(--game-board-cell-circle-yellow);
     border-radius: 50%;
 }
 
-.game_board_sell[data-emphasize=true] {
+.game_board_cell[data-emphasize=true] {
     animation-name: emphasize_aanimetion;
     animation-duration: 1.5s;
     animation-delay: 1s;

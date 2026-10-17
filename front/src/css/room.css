@@ -5,7 +5,7 @@
     font-size: 170%;
     display: flex;
     flex-direction: column;
-    color: var(--game-board-sell-circle-border-color);
+    color: var(--game-board-cell-circle-border-color);
     user-select: none;
 }
 
@@ -70,7 +70,7 @@
 .roomPlayerRemote {
     width: 300px;
     height: 80%;
-    background-color: var(--game-board-sell-circle-background-color);
+    background-color: var(--game-board-cell-circle-background-color);
     text-align: center;
 }
 
@@ -84,7 +84,7 @@
 .personImage {
     margin-top: 20px;
     width: 80%;
-    border: solid 1px var(--game-board-sell-circle-border-color);
+    border: solid 1px var(--game-board-cell-circle-border-color);
 }
 
 #readyStartGame {

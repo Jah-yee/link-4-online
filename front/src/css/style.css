@@ -11,12 +11,12 @@
     --game-board-background-color: #61aef9;
     --game-board-border-color: #4f9deb;
     --game-board-border-size: 5px;
-    --game-board-sell-circle-margin: 1px;
-    --game-board-sell-circle-background-color: #4f9deb;
-    --game-board-sell-circle-border-color: #ede4e2;
-    --game-board-sell-circle-red: #c08497;
-    --game-board-sell-circle-yellow: #d4b483;
-    --game-board-sell-radius: 50%;
+    --game-board-cell-circle-margin: 1px;
+    --game-board-cell-circle-background-color: #4f9deb;
+    --game-board-cell-circle-border-color: #ede4e2;
+    --game-board-cell-circle-red: #c08497;
+    --game-board-cell-circle-yellow: #d4b483;
+    --game-board-cell-radius: 50%;
 }
 
 noscript {

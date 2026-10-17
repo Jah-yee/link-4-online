@@ -6,11 +6,11 @@ class GameState(RootModel[Literal["unstarted", "playing", "gameset"]]):
     pass
 
 
-class BoardSell(RootModel[Literal[0, 1, 2]]):
+class BoardCell(RootModel[Literal[0, 1, 2]]):
     pass
 
 
-class Board(RootModel[list[list[BoardSell]]]):
+class Board(RootModel[list[list[BoardCell]]]):
     pass
 
 

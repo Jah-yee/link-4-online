@@ -13,10 +13,10 @@ export const canJoinRoom = async (roomId: number = NaN): Promise<boolean> => {
     }
     const request = createRequest(targetUrl, "POST", body)
     // rezultじゃなくてresultですね
-    const rezult = await fetch(request).then(
+    const result = await fetch(request).then(
         value => value.text()
     )
-    return (rezult == "true")
+    return (result == "true")
 }
 
 export const createRoom = async () => {
@@ -24,10 +24,10 @@ export const createRoom = async () => {
         action: "CREATE"
     }
     const request = createRequest(targetUrl, "POST", body)
-    const rezult = Number(await fetch(request).then(
+    const result = Number(await fetch(request).then(
         value => value.text()
     ))
-    if (typeof rezult == 'number') {
-        router.push(`/room/${rezult}`)
+    if (typeof result == 'number') {
+        router.push(`/room/${result}`)
     }
 }

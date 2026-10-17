@@ -1,5 +1,5 @@
 from Game.win_check import wincheck
-from schemas.game import GameData, GameState, PlayerNumber, Board, BoardSell
+from schemas.game import GameData, GameState, PlayerNumber, Board, BoardCell
 import logging
 
 logger = logging.getLogger("ubvicorn.error")
@@ -9,7 +9,7 @@ class Link_4:
     def __init__(self):
         self.gameState: GameState = GameState("unstarted")
         self.now_turn: PlayerNumber = PlayerNumber(1)
-        self._board: Board = Board([[BoardSell(0) for _ in range(7)] for _ in range(6)])
+        self._board: Board = Board([[BoardCell(0) for _ in range(7)] for _ in range(6)])
 
     @property
     def board_height(self):
@@ -31,7 +31,7 @@ class Link_4:
     def game_start(self):
         self.gameState.root = "playing"
         self.now_turn.root = 1
-        self._board = Board([[BoardSell(0) for _ in range(7)] for _ in range(6)])
+        self._board = Board([[BoardCell(0) for _ in range(7)] for _ in range(6)])
 
     def put(self, x: int, player: PlayerNumber):
         logger.info(f"put {x} player: {player}")
@@ -85,11 +85,11 @@ class Link_4:
     def reset(self):
         self.gameState.root = "unstarted"
         self.now_turn.root = 1
-        self._board = Board([[BoardSell(0) for _ in range(7)] for _ in range(6)])
+        self._board = Board([[BoardCell(0) for _ in range(7)] for _ in range(6)])
 
     @property
     def get_board_support_JSON(self):
-        return [[sell.root for sell in row] for row in self.board.root]
+        return [[cell.root for cell in row] for row in self.board.root]
 
     def get_game_data(self, player: PlayerNumber) -> GameData:
         logger.info(f"get_game_data: {self.gameState.root}")

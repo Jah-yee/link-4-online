@@ -20,7 +20,7 @@ export class Link4 {
 		)
 	}
 
-	static isSell(value: unknown): value is Link4.Sell {
+	static isCell(value: unknown): value is Link4.Cell {
 		return (
 			value !== null &&
 			typeof value == "number" &&
@@ -35,7 +35,7 @@ export class Link4 {
 
 	static isBoard(value: unknown): value is Link4.Board {
 		if (!(value !== null && Array.isArray(value))) return false
-		return value.flat().map((item) => this.isSell(item))
+		return value.flat().map((item) => this.isCell(item))
 			.reduce((item, nextItem) => item == true && nextItem == true)
 	}
 
@@ -101,8 +101,8 @@ export class Link4 {
 
 export namespace Link4 {
 	// SellじゃなくてCellですかね
-	export type Sell = 0 | 1 | 2
-	export type Board = Sell[][]
+	export type Cell = 0 | 1 | 2
+	export type Board = Cell[][]
 	export type GameState = "unstarted" | "playing" | "gameset";
 	export type GameX = 0 | 1 | 2 | 3 | 4 | 5 | 6
 	export type WinPattern = {

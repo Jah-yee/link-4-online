@@ -1,6 +1,6 @@
 <script setup lang="ts">
 </script>
 <template>
-    <div class="game_board_sell" ref="targetSell">
+    <div class="game_board_cell" ref="targetCell">
     </div>
 </template>
