@@ -30,12 +30,6 @@ export namespace WebsocketBody {
         action: "EXITROOM"
     }
 
-    // WebSocketBody所属だけど実際は普通のHTTPリクエスト。
-    // リファクタリングしてた時これで結構紛らわしくなってた
-    export interface CreateRoomBody {
-        action: "CREATE"
-    }
-
     export interface GameStart extends BaseBody {
         action: "GAMESTART"
     }
@@ -164,3 +158,8 @@ export const WebsocketMessage = {
     },
 }
 
+// WebSocketBody所属だけど実際は普通のHTTPリクエスト。
+// リファクタリングしてた時これで結構紛らわしくなってた
+export interface CreateRoomBody {
+    action: "CREATE"
+}

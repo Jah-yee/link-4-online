@@ -1,5 +1,5 @@
 import { router } from './router';
-import type { WebsocketBody } from './type';
+import type { WebsocketBody, CreateRoomBody } from './type';
 import { createRequest } from './util';
 
 const targetUrl = `${import.meta.env.VITE_API_BASE_URL}/room`
@@ -20,7 +20,7 @@ export const canJoinRoom = async (roomId: number = NaN): Promise<boolean> => {
 }
 
 export const createRoom = async () => {
-    const body: WebsocketBody.CreateRoomBody = {
+    const body: CreateRoomBody = {
         action: "CREATE"
     }
     const request = createRequest(targetUrl, "POST", body)
