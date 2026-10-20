@@ -15,6 +15,7 @@ RUN pip install -r requirements.txt
 # Copy source code
 COPY ./server/src ./src
 
-CMD ["python", "src/server.py"]
-
 EXPOSE 8000
+
+ENTRYPOINT ["python", "src/server.py"]
+
