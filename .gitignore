@@ -36,3 +36,7 @@ dist/*
 !dist/assets
 dist/assets/*
 !dist/assets/.gitkeep
+
+# environment
+*.env*
+!*.env*.example
