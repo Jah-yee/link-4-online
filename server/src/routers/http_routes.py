@@ -1,5 +1,3 @@
-from os import eventfd_write
-
 from fastapi import APIRouter, Request, Body
 from fastapi.responses import HTMLResponse
 from pathlib import Path
@@ -10,27 +8,7 @@ import logging
 
 logger = logging.getLogger("uvicorn.error")
 
-DISTDIR = Path(__file__).resolve().parent / ".." / ".." / ".." / "dist"
-
 router = APIRouter(prefix="", tags=["http"])
-
-
-@router.get("/")
-def _(request: Request):
-    nonce = request.state.nonce
-    html_content = (DISTDIR / "index.html").read_text(encoding="utf-8")
-    html_content = html_content.replace("__NONCE__", nonce)
-    return HTMLResponse(content=html_content, status_code=200)
-
-
-@router.get("/room/{room_id:path}")
-async def _(request: Request):
-    logger.info(f"get room {request}")
-    nonce = request.state.nonce
-    html_content = (DISTDIR / "index.html").read_text(encoding="utf-8")
-    html_content = html_content.replace("__NONCE__", nonce)
-    return HTMLResponse(content=html_content, status_code=200)
-
 
 @router.post("/room")
 async def _(
