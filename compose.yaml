@@ -9,7 +9,7 @@ services:
       - ./server/.env.development
     volumes:
       - ./server/:/app/server/
-      - /app/front/.venv/
+      - /app/server/.venv/
   frontend:
     build:
       context: .

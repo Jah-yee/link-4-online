@@ -1,16 +1,14 @@
-FROM python:3.12-slim
+FROM astral/uv:python3.12-bookworm-slim
 
 WORKDIR /app/server
 
-# Create virtual environment
-RUN python -m venv .venv
-ENV PATH="/app/front/.venv/bin:$PATH"
 
 # Package management
 COPY ./server/requirements.txt .
 
 # Install packages
-RUN pip install -r requirements.txt
+RUN --mount=type=cache,target=/root/.chache/uv \
+    uv pip sync requirements.txt --system
 
 # Copy source code
 COPY ./server/src ./src
