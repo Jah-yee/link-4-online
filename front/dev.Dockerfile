@@ -6,10 +6,10 @@ WORKDIR /app/front
 COPY ./front/package.json \
   ./front/pnpm-lock.yaml \
   ./
-  
+
   # Install packages
-  RUN npm install -g pnpm && pnpm install --frozen-lockfile
-  
+RUN corepack enable && pnpm install --frozen-lockfile
+
 # Copy source code
 COPY ./front/index.html \
   ./front/tsconfig.json \
