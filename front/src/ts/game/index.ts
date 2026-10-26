@@ -100,6 +100,7 @@ export class Link4 {
 }
 
 export namespace Link4 {
+	// SellじゃなくてCellですかね
 	export type Sell = 0 | 1 | 2
 	export type Board = Sell[][]
 	export type GameState = "unstarted" | "playing" | "gameset";

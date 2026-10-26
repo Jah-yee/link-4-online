@@ -26,12 +26,12 @@ I created this repository to learn WebSocket and Vue.js.
 #### Dev
 Start the development container using `docker-compose.dev.yml`
 ```bash
-docker compose -f docker-compose.dev.yml up
+docker compose up
 ```
 #### Build
 Start the built container using `docker-compose.yml`
 ```bash
-docker compose up
+docker compose -f compose.prod.yaml up
 ```
 ### pnpm + pip
 #### Setup

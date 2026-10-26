@@ -37,7 +37,8 @@ export class Room {
         }
 
         try {
-            const targetWebsocketURL = `ws://localhost:8000/room/${this.#id}`;
+            const wsBaseUrl = import.meta.env.VITE_WS_BASE_URL
+            const targetWebsocketURL = `${wsBaseUrl}/room/${this.#id}`;
             this.#ws = new WebSocket(targetWebsocketURL)
             console.log("create ws")
             this.#ws.addEventListener("open", () => this.#websocketOpen())
