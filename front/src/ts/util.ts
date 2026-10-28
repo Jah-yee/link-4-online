@@ -21,39 +21,39 @@ export function createRequest(url: string, method: "GET" | "POST", body: Object)
 }
 
 export class Debounce<T> {
-    #vlaue: ShallowRef<T>
+    #value: ShallowRef<T>
     #setTimeoutId: number
     #reflectionDelay: number
     #reflectionHandler: Function
-    #inputEventLister: Function[] = []
-    constructor(vlaue: T, reflactionDelay: number, reflectionHandler: Function) {
-        this.#vlaue = shallowRef(vlaue)
-        this.#reflectionDelay = reflactionDelay
+    #inputEventListener: Function[] = []
+    constructor(value: T, reflectionDelay: number, reflectionHandler: Function) {
+        this.#value = shallowRef(value)
+        this.#reflectionDelay = reflectionDelay
         this.#setTimeoutId = setTimeout(() => this.reflection(), this.#reflectionDelay);
         this.#reflectionHandler = reflectionHandler
     }
 
     input(value: T) {
-        this.#vlaue.value = value
+        this.#value.value = value
         clearTimeout(this.#setTimeoutId)
         this.#setTimeoutId = setTimeout(() => this.reflection(), this.#reflectionDelay);
-        if (this.#inputEventLister) {
-            this.#inputEventLister.forEach((calllback) => {
-                calllback(this.value)
+        if (this.#inputEventListener) {
+            this.#inputEventListener.forEach((callback) => {
+                callback(this.value)
             })
         }
     }
 
     reflection() {
         console.log("reflection", this)
-        this.#reflectionHandler(this.#vlaue)
+        this.#reflectionHandler(this.#value)
     }
 
-    addInputEventListener(calllback: Function) {
-        this.#inputEventLister.push(calllback)
+    addInputEventListener(callback: Function) {
+        this.#inputEventListener.push(callback)
     }
 
     get value() {
-        return this.#vlaue.value
+        return this.#value.value
     }
 }
